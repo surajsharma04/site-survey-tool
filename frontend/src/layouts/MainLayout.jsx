@@ -1,8 +1,8 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { LayoutDashboard, Map, FileText, Settings, LogOut, Building2, ClipboardCheck, RadioTower, UserRound } from 'lucide-react';
-import { canAccessPath, clearSession } from '../auth';
+import { LayoutDashboard, Map, FileText, Settings, LogOut, Building2, ClipboardCheck, RadioTower, UserRound, Menu, X } from 'lucide-react';
+import { canAccessPath, clearSession, getDefaultPathForRole } from '../auth';
 import { useInteractiveEffects } from '../hooks/useInteractiveEffects';
 import { getWorkspaceSnapshot } from '../workspaceSnapshot';
 
@@ -13,6 +13,7 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [workspace, setWorkspace] = useState(() => getWorkspaceSnapshot());
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [profile, setProfile] = useState(() => {
     const savedSettings = localStorage.getItem('siteSurveySettings');
     const savedUser = localStorage.getItem('siteSurveyUser');
@@ -79,6 +80,10 @@ const MainLayout = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
     const syncProfile = () => {
       const savedSettings = localStorage.getItem('siteSurveySettings');
       const savedUser = localStorage.getItem('siteSurveyUser');
@@ -106,6 +111,12 @@ const MainLayout = () => {
   const handleLogout = () => {
     clearSession();
     navigate('/login');
+  };
+
+  const homePath = getDefaultPathForRole(profile.role);
+
+  const handleNavigateHome = () => {
+    navigate(homePath);
   };
 
   const navItems = [
@@ -138,13 +149,13 @@ const MainLayout = () => {
         <div className="ambient-panel ambient-panel-three" />
       </div>
       <aside ref={sidebarRef} className="shell-sidebar sticky top-4 z-10 m-4 hidden h-[calc(100vh-2rem)] w-[292px] flex-col overflow-hidden rounded-[24px] px-5 py-6 text-white shadow-2xl xl:flex">
-        <div className="mb-8 flex items-center gap-4">
+        <button type="button" onClick={handleNavigateHome} className="mb-8 flex items-center gap-4 bg-transparent p-0 text-left">
           <div className="brand-mark flex h-12 w-12 items-center justify-center rounded-2xl font-black text-white shadow-lg">N</div>
           <div>
             <span className="block font-display text-xl font-bold tracking-tight text-white">NetGrid Survey</span>
             <span className="block text-[10px] font-bold uppercase tracking-[0.28em] text-cyan-200/80">Site operations</span>
           </div>
-        </div>
+        </button>
 
         <nav className="flex-1 space-y-2">
           {navItems.map((item, index) => {
@@ -180,16 +191,90 @@ const MainLayout = () => {
         </div>
       </aside>
 
+      {isMobileMenuOpen ? (
+        <div className="fixed inset-0 z-40 xl:hidden" aria-hidden={!isMobileMenuOpen}>
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <aside id="mobile-navigation" className="shell-sidebar absolute left-4 top-4 flex h-[calc(100vh-2rem)] w-[min(82vw,320px)] flex-col overflow-hidden rounded-[24px] px-5 py-6 text-white shadow-2xl">
+            <div className="mb-8 flex items-start justify-between gap-4">
+              <button type="button" onClick={handleNavigateHome} className="flex items-center gap-4 bg-transparent p-0 text-left">
+                <div className="brand-mark flex h-12 w-12 items-center justify-center rounded-2xl font-black text-white shadow-lg">N</div>
+                <div>
+                  <span className="block font-display text-xl font-bold tracking-tight text-white">NetGrid Survey</span>
+                  <span className="block text-[10px] font-bold uppercase tracking-[0.28em] text-cyan-200/80">Site operations</span>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="shell-icon-button inline-flex shrink-0 !border-white/10 !bg-white/10 !text-white"
+                aria-label="Close navigation menu"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <nav className="flex-1 space-y-2">
+              {navItems.map((item, index) => {
+                const isActive = location.pathname.includes(item.path);
+                return (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    className={`shell-nav-link ${isActive ? 'is-active' : ''}`}
+                  >
+                    {item.icon}
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="shell-status mt-6 rounded-[24px] p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-white">System health</p>
+                <span className="rounded-full bg-emerald-400/15 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-200">{workspace.systemHealth}</span>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-2xl font-semibold text-white">{workspace.openSites}</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Open sites</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-white">{workspace.readinessPercent}%</p>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Readiness</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      ) : null}
+
       <main className="relative flex min-h-screen flex-1 flex-col">
         <header className="app-header sticky top-4 z-20 mx-4 mt-4 flex min-h-[76px] items-center justify-between rounded-[20px] border px-5 py-4 backdrop-blur-xl lg:px-7">
           <div className="flex items-center gap-4">
-            <div className="brand-mark flex h-11 w-11 items-center justify-center rounded-2xl font-black text-white shadow-lg xl:hidden">
-              N
-            </div>
-            <div>
-              <p className="font-display text-xl font-semibold text-slate-950">NetGrid Survey</p>
-              <p className="text-xs font-medium text-slate-500">Field operations</p>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="shell-icon-button inline-flex xl:hidden"
+              aria-label="Open navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <Menu size={18} />
+            </button>
+            <button type="button" onClick={handleNavigateHome} className="flex items-center gap-4 bg-transparent p-0 text-left">
+              <div className="brand-mark flex h-11 w-11 items-center justify-center rounded-2xl font-black text-white shadow-lg xl:hidden">
+                N
+              </div>
+              <div>
+                <p className="font-display text-xl font-semibold text-slate-950">NetGrid Survey</p>
+                <p className="text-xs font-medium text-slate-500">Field operations</p>
+              </div>
+            </button>
           </div>
 
           <div className="flex items-center gap-3">
