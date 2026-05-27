@@ -2,7 +2,7 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-COPY . .
+COPY backend .
 
 RUN chmod +x gradlew
 RUN ./gradlew build -x test
