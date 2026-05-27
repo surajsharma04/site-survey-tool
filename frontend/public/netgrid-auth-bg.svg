@@ -1,0 +1,34 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="1080" fill="#020617"/>
+  <path d="M0 0H1920V1080H0V0Z" fill="url(#wash)"/>
+  <g opacity=".4">
+    <path d="M0 180H1920M0 300H1920M0 420H1920M0 540H1920M0 660H1920M0 780H1920M0 900H1920M240 0V1080M480 0V1080M720 0V1080M960 0V1080M1200 0V1080M1440 0V1080M1680 0V1080" stroke="white" stroke-opacity=".08"/>
+  </g>
+  <g filter="url(#glow)">
+    <ellipse cx="440" cy="680" rx="520" ry="320" fill="#e50914" opacity=".46"/>
+    <ellipse cx="1320" cy="430" rx="560" ry="360" fill="#06b6d4" opacity=".40"/>
+    <ellipse cx="1050" cy="890" rx="380" ry="230" fill="#22c55e" opacity=".30"/>
+  </g>
+  <g opacity=".75">
+    <rect x="236" y="276" width="390" height="250" rx="34" transform="rotate(-9 236 276)" fill="url(#panel1)" stroke="white" stroke-opacity=".16"/>
+    <rect x="1180" y="230" width="450" height="280" rx="38" transform="rotate(10 1180 230)" fill="url(#panel2)" stroke="white" stroke-opacity=".16"/>
+    <rect x="786" y="690" width="430" height="240" rx="36" transform="rotate(-5 786 690)" fill="url(#panel3)" stroke="white" stroke-opacity=".14"/>
+  </g>
+  <g opacity=".9">
+    <path d="M300 818C470 652 632 724 780 572C946 400 1128 426 1320 316C1456 238 1616 256 1740 170" stroke="#67e8f9" stroke-width="5" stroke-linecap="round"/>
+    <path d="M190 462C400 390 556 464 748 380C952 292 1138 328 1356 458C1498 542 1622 540 1780 494" stroke="#fb7185" stroke-width="4" stroke-linecap="round"/>
+    <path d="M528 864C740 750 930 806 1122 676C1292 560 1472 626 1668 588" stroke="#86efac" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <defs>
+    <radialGradient id="wash" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 540) rotate(90) scale(670 960)">
+      <stop stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#020617"/>
+    </radialGradient>
+    <linearGradient id="panel1" x1="236" x2="626" y1="276" y2="526" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity=".22"/><stop offset="1" stop-color="#e50914" stop-opacity=".12"/></linearGradient>
+    <linearGradient id="panel2" x1="1180" x2="1630" y1="230" y2="510" gradientUnits="userSpaceOnUse"><stop stop-color="#06b6d4" stop-opacity=".24"/><stop offset="1" stop-color="#ffffff" stop-opacity=".08"/></linearGradient>
+    <linearGradient id="panel3" x1="786" x2="1216" y1="690" y2="930" gradientUnits="userSpaceOnUse"><stop stop-color="#22c55e" stop-opacity=".22"/><stop offset="1" stop-color="#a855f7" stop-opacity=".13"/></linearGradient>
+    <filter id="glow" x="-160" y="-20" width="2200" height="1280" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="78"/>
+    </filter>
+  </defs>
+</svg>
